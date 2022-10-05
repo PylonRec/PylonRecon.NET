@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon.Geometry", "src\PylonRecon.Geometry\PylonRecon.Geometry.csproj", "{F5326D37-3882-4AAE-A3A7-F8146BC81B0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon.CLI", "src\PylonRecon.CLI\PylonRecon.CLI.csproj", "{8B18F797-81A0-4065-929C-19B9171D03BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon", "src\PylonRecon\PylonRecon.csproj", "{8F51433D-3E8B-4573-8FF7-8E00E483855A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{F5326D37-3882-4AAE-A3A7-F8146BC81B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5326D37-3882-4AAE-A3A7-F8146BC81B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5326D37-3882-4AAE-A3A7-F8146BC81B0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B18F797-81A0-4065-929C-19B9171D03BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B18F797-81A0-4065-929C-19B9171D03BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B18F797-81A0-4065-929C-19B9171D03BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B18F797-81A0-4065-929C-19B9171D03BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
