@@ -5,8 +5,8 @@ namespace PylonRecon;
 
 public sealed class CloudPoint
 {
-    public Point3D Location { get; set; }
-    public Color Color { get; set; }
-    public Vector3D Normal { get; set; }
-    public double Intensity { get; set; }
+    public Point3D Location { get; init; } = Point3D.Origin;
+    public Color Color { get; init; }
+    public Vector3D Normal { get; init; } = Vector3D.Zero;
+    public double Intensity { get; init; }
 }
