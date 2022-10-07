@@ -110,7 +110,7 @@ public class GeneticAlgorithm<TGene, TTrait> where TGene : struct
             });
             generation++;
             var optimumIndividual = currentPopulation.MaxBy(p => p.Fitness).Trait;
-            if (endingPredicate(optimumIndividual))
+            if (endingPredicate(optimumIndividual) || generation > 200)
             {
                 return optimumIndividual;
             }

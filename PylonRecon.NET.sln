@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon.CLI", "src\Pylon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon", "src\PylonRecon\PylonRecon.csproj", "{8F51433D-3E8B-4573-8FF7-8E00E483855A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParatuneClient", "src\ParatuneClient\ParatuneClient.csproj", "{3E4176D3-A27D-4783-9300-FEA6F248B6C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E4176D3-A27D-4783-9300-FEA6F248B6C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E4176D3-A27D-4783-9300-FEA6F248B6C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E4176D3-A27D-4783-9300-FEA6F248B6C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E4176D3-A27D-4783-9300-FEA6F248B6C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
