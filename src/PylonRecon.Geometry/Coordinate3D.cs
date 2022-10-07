@@ -8,28 +8,14 @@ namespace PylonRecon.Geometry;
 /// </summary>
 public abstract class Coordinate3D
 {
-    /// <summary>
-    /// The X coordinate.
-    /// </summary>
     public double X { get; }
-    
-    /// <summary>
-    /// The Y coordinate.
-    /// </summary>
     public double Y { get; }
-    
-    /// <summary>
-    /// The Z coordinate.
-    /// </summary>
     public double Z { get; }
     
     /// <summary>
     /// Default constructor method for <see cref="Coordinate3D"/>. <br />
     /// Requires X, Y, Z coordinate to be specified explicitly.
     /// </summary>
-    /// <param name="x">The X coordinate.</param>
-    /// <param name="y">The Y coordinate.</param>
-    /// <param name="z">The Z coordinate.</param>
     protected Coordinate3D(double x, double y, double z)
     {
         X = x;
@@ -38,21 +24,13 @@ public abstract class Coordinate3D
     }
     
     /// <summary>
-    /// Validate value equality for current coordinate and another coordinate.
+    /// Validate value equality for current coordinate and another.
     /// </summary>
-    /// <param name="other">Another <see cref="Coordinate3D"/> object to be compared.</param>
-    /// <returns></returns>
     private bool Equals(Coordinate3D other) => X.IsEquivalentTo(other.X) && Y.IsEquivalentTo(other.Y) && Z.IsEquivalentTo(other.Z);
 
     /// <summary>
     /// Validate value equality for current coordinate and another object with any type.
     /// </summary>
-    /// <param name="obj">Another object to be compared.</param>
-    /// <returns>
-    /// <b>True</b> - if <see cref="obj"/> is a <see cref="Coordinate3D"/> and is value-equal to current coordinate;
-    /// <br />
-    /// <b>False</b> - otherwise.
-    /// </returns>
     public override bool Equals(object? obj)
     {
         if (obj is null) return false;
@@ -63,10 +41,18 @@ public abstract class Coordinate3D
     /// <summary>
     /// Get hashcode for current coordinate.
     /// </summary>
-    /// <returns>Hashcode for current coordinate.</returns>
     public override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
+    /// <summary>
+    /// Default string that represents current coordinate.
+    /// </summary>
+    /// <returns></returns>
     public override string ToString() => $"({X}, {Y}, {Z})";
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string ToString(char separator) => $"{X}{separator}{Y}{separator}{Z}";
 
     public IEnumerable<double> ToEnumerable() => new[] {X, Y, Z};
 

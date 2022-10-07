@@ -1,4 +1,5 @@
 using PylonRecon.Algorithm;
+using PylonRecon.Algorithm.Helpers;
 using PylonRecon.Geometry;
 using PylonRecon.Helpers;
 
@@ -8,50 +9,71 @@ public class CentralAxisFinder
 {
     private readonly GeneticAlgorithm<uint, (double, double)> _geneticAlgorithm;
     private readonly PointCloud _pointCloud;
-    private readonly Point3D _geometricCenter;
+    public Point3D GeometricCenter { get; }
+
+    public event EventHandler<GeneticAlgorithmGenerationCalculatedEventArgs<(double, double)>>? GenerationCalculated; 
 
     public CentralAxisFinder(PointCloud pointCloud)
     {
-        _geneticAlgorithm = new(new CentralAxisDirectionGeneCodec(), OriginalFeature, GeneCrossover, GeneMutation, Fitness);
+        _geneticAlgorithm = new(new CentralAxisDirectionGeneCodec(), Fitness, GeneCrossover, GeneMutation);
+        _geneticAlgorithm.GenerationCalculated += (_, args) =>
+        {
+            GenerationCalculated?.Invoke(this, args);
+        };
         _pointCloud = pointCloud;
         double xCenter = pointCloud.Locations.Average(static p => p.X);
         double yCenter = pointCloud.Locations.Average(static p => p.Y);
         double zCenter = pointCloud.Locations.Average(static p => p.Z);
-        _geometricCenter = (xCenter, yCenter, zCenter);
+        GeometricCenter = (xCenter, yCenter, zCenter);
     }
 
-    public Line3D FindCentralAxis(int maxGeneration, double crossoverProbability, double mutationProbability)
+    public Line3D FindCentralAxis(int maxGeneration, double crossoverProbability, double mutationProbability,
+        double populationSelectionRatio, int initialPopulationScale)
     {
         HashSet<(double, double)> initialPopulation = new();
         Random rand = new();
-        while (initialPopulation.Count < 16)
+        while (initialPopulation.Count < initialPopulationScale)
         {
             double alpha = rand.NextDouble() * 2d * Math.PI;
-            double beta = rand.NextDouble() * Math.PI;
+            double beta = rand.NextDouble() * Math.PI - Math.PI / 2;
             initialPopulation.Add((alpha, beta));
         }
-        var trait = _geneticAlgorithm.Compute(initialPopulation, crossoverProbability, mutationProbability, maxGeneration);
-        double dirX = Math.Cos(trait.Item1) * Math.Cos(trait.Item2);
-        double dirY = Math.Sin(trait.Item1) * Math.Cos(trait.Item2);
-        double dirZ = Math.Sin(trait.Item2);
-        return new(_geometricCenter, new Vector3D(dirX, dirY, dirZ));
+
+        var trait = _geneticAlgorithm.Compute(initialPopulation, crossoverProbability, mutationProbability,
+            populationSelectionRatio, maxGeneration);
+        double dirX = Math.Cos(trait.Item1) * Math.Sin(trait.Item2);
+        double dirY = Math.Sin(trait.Item1) * Math.Sin(trait.Item2);
+        double dirZ = Math.Cos(trait.Item2);
+        return new(GeometricCenter, new Vector3D(dirX, dirY, dirZ));
     }
-    
-    private double OriginalFeature((double Alpha, double Beta) trait)
+
+    public Line3D FindCentralAxisInfinite(double crossoverProbability, double mutationProbability,
+        double populationSelectionRatio, int initialPopulationScale, Predicate<(double, double)> endingPredicate)
     {
-        double dirX = Math.Cos(trait.Alpha) * Math.Cos(trait.Beta);
-        double dirY = Math.Sin(trait.Alpha) * Math.Cos(trait.Beta);
-        double dirZ = Math.Sin(trait.Beta);
-        Line3D centralAxis = new(_geometricCenter, new Vector3D(dirX, dirY, dirZ));
-        return _pointCloud.Sum(p => p.Location.DistanceTo(centralAxis));
+        HashSet<(double, double)> initialPopulation = new();
+        Random rand = new();
+        while (initialPopulation.Count < initialPopulationScale)
+        {
+            double alpha = rand.NextDouble() * 2d * Math.PI;
+            double beta = rand.NextDouble() * Math.PI - Math.PI / 2;
+            initialPopulation.Add((alpha, beta));
+        }
+
+        var trait = _geneticAlgorithm.InfiniteCompute(initialPopulation, crossoverProbability, mutationProbability,
+            populationSelectionRatio, endingPredicate);
+        double dirX = Math.Cos(trait.Item1) * Math.Sin(trait.Item2);
+        double dirY = Math.Sin(trait.Item1) * Math.Sin(trait.Item2);
+        double dirZ = Math.Cos(trait.Item2);
+        return new(GeometricCenter, new Vector3D(dirX, dirY, dirZ));
     }
-    
-    private List<double> Fitness(List<double> originalFeature)
+
+    private double Fitness((double Alpha, double Beta) trait)
     {
-        double max = originalFeature.Max();
-        double min = originalFeature.Min();
-        double fix = (max - min) / originalFeature.Count() / originalFeature.Count();
-        return originalFeature.Select(d => max - d + fix).ToList();
+        double dirX = Math.Cos(trait.Alpha) * Math.Sin(trait.Beta);
+        double dirY = Math.Sin(trait.Alpha) * Math.Sin(trait.Beta);
+        double dirZ = Math.Cos(trait.Beta);
+        Line3D centralAxis = new(GeometricCenter, new Vector3D(dirX, dirY, dirZ));
+        return 1d / _pointCloud.Sum(p => p.Location.DistanceTo(centralAxis));
     }
     
     private (uint, uint) GeneCrossover(uint gene1, uint gene2, double crossoverProbability)
@@ -88,7 +110,7 @@ public class CentralAxisFinder
         public uint Convert((double Alpha, double Beta) from)
         {
             uint higher = (uint)Math.Floor(from.Alpha / 2d / Math.PI * 65536d);
-            uint lower = (uint)Math.Floor(from.Beta / Math.PI * 65536d);
+            uint lower = (uint)Math.Floor((from.Beta + Math.PI / 2d) / Math.PI * 65536d);
             return (higher << 16) | lower;
         }
 
@@ -96,7 +118,7 @@ public class CentralAxisFinder
         {
             uint higher = backFrom >> 16;
             uint lower = backFrom & 0x0000ffff;
-            return (higher / 65536d * 2d * Math.PI, lower / 65536d * Math.PI);
+            return (higher / 65536d * 2d * Math.PI, lower / 65536d * Math.PI - Math.PI / 2d);
         }
     }
 }

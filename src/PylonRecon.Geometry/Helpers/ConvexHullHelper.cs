@@ -3,7 +3,7 @@ using MathNet.Numerics.LinearAlgebra;
 namespace PylonRecon.Geometry.Helpers;
 
 /// <summary>
-/// Convex hull generating static helper, used to generate a list collection of points of a set,
+/// Convex hull generating static helper, used to generate a list collection of points inside the given set,
 /// which requires all the points lie in the same plane.
 /// </summary>
 public static class ConvexHullHelper
@@ -31,6 +31,7 @@ public static class ConvexHullHelper
         Dictionary<Point2D, Point3D> mappedPoints = new();
         foreach (var p in points)
         {
+            // Exclude all points that don't lie in the plane.
             if (!plane.Contains(p)) continue;
             var relative = plane.CenterPoint.VectorTo(p).GetRelativeCoordinate(xBase, yBase);
             if (relative is null) continue;

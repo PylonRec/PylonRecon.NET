@@ -2,17 +2,39 @@ using PylonRecon.Geometry.Helpers;
 
 namespace PylonRecon.Geometry;
 
+/// <summary>
+/// Base class derived by <see cref="Point2D"/> ans <see cref="Vector2D"/>.
+/// Presenting a coordinate in 2-dimensional space.
+/// </summary>
 public abstract class Coordinate2D
 {
+    /// <summary>
+    /// The X coordinate.
+    /// </summary>
     public double X { get; }
+    
+    /// <summary>
+    /// The Y coordinate.
+    /// </summary>
     public double Y { get; }
 
+    /// <summary>
+    /// Default constructor method for <see cref="Coordinate2D"/>.
+    /// Requires X, Y coordinates to be specified explicitly.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     protected Coordinate2D(double x, double y)
     {
         X = x;
         Y = y;
     }
 
+    /// <summary>
+    /// Validate value equality for current coordinate and another coordinate.
+    /// </summary>
+    /// <param name="other">Another <see cref="Coordinate2D"/> object to be compared.</param>
+    /// <returns></returns>
     private bool Equals(Coordinate2D other) => X.IsEquivalentTo(other.X) && Y.IsEquivalentTo(other.Y);
 
     public override bool Equals(object? obj)
