@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon.CLI", "src\Pylon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon", "src\PylonRecon\PylonRecon.csproj", "{8F51433D-3E8B-4573-8FF7-8E00E483855A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon.ModelGenerator", "src\PylonRecon.ModelGenerator\PylonRecon.ModelGenerator.csproj", "{C5A8AB9F-1BD0-43AB-A779-3F9BC9FAEA1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F51433D-3E8B-4573-8FF7-8E00E483855A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5A8AB9F-1BD0-43AB-A779-3F9BC9FAEA1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5A8AB9F-1BD0-43AB-A779-3F9BC9FAEA1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5A8AB9F-1BD0-43AB-A779-3F9BC9FAEA1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5A8AB9F-1BD0-43AB-A779-3F9BC9FAEA1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
