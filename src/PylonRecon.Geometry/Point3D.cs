@@ -71,6 +71,26 @@ public sealed class Point3D : Coordinate3D
     public Point3D MoveBy(Vector3D displacement) => (X + displacement.X, Y + displacement.Y, Z + displacement.Z);
 
     /// <summary>
+    /// Project the point to the specified plane.
+    /// </summary>
+    /// <param name="plane">The target plane to project the point to.</param>
+    /// <returns>The projection point in the plane.</returns>
+    public Point3D ProjectTo(Plane3D plane)
+    {
+        // plane defined by n (normal vector) and O (one point)
+        // Solve point Q which satisfies:
+        // PQ is parallel to n                          (1)
+        // Q is in plane => OQ is perpendicular to n    (2)
+        // (1) => PQ = k · n
+        // (1) & (2) => OQ · n = 0 => (OP + k · n) · n = 0
+        // k = - (OP · n) / (n · n)
+        var op = plane.CenterPoint.VectorTo(this);
+        var n = plane.NormalVector;
+        double k = -1d * (op * n) / (n * n);
+        return MoveBy(k * n);
+    }
+    
+    /// <summary>
     /// Returns a random point whose coordinates all lie between -1 and 1.
     /// </summary>
     /// <returns>The random point constructed.</returns>

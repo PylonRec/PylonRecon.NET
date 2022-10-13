@@ -83,6 +83,8 @@ public abstract class LineBase
     
     public double IncludedAngleTo(Line3D other) => Math.Acos(DirectionVector * other.DirectionVector);
 
+    public Plane3D SamplePerpendicularPlane() => new(FixedPoint, DirectionVector);
+    
     private bool Equals(LineBase other)
     {
         if (GetType() != other.GetType()) return false;

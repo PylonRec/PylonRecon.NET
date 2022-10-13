@@ -114,6 +114,15 @@ public sealed class Vector3D : Coordinate3D
     /// <returns></returns>
     public double IncludedAngleWith(Vector3D other) => Math.Acos(this * other / Length / other.Length);
 
+    public Vector3D GetPerpendicularVectorSample() =>
+        this switch
+        {
+            {X: 0} => (1d, 0d, 0d),
+            {Y: 0} => (0d, 1d, 0d),
+            {Z: 0} => (0d, 0d, 1d),
+            _ => (1d, 1d, -1d * (X + Y) / Z)
+        };
+
     /// <summary>
     /// Returns a random vector whose coordinates all lie between -1 and 1.
     /// </summary>
