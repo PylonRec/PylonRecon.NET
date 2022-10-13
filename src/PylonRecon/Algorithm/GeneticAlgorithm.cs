@@ -24,22 +24,21 @@ public class GeneticAlgorithm<TGene, TTrait> where TGene : struct
         _fitnessFunc = fitnessFunc;
     }
 
-    private List<(TTrait Trait, double Fitness)> ComputeRound(
-        List<(TTrait Trait, double Fitness)> population,
-        double crossoverProbability,
-        double mutationProbability,
-        double populationSelectionRatio)
+    private List<(TTrait Trait, double Fitness)> ComputeGeneration(List<(TTrait Trait, double Fitness)> population,
+        double crossoverProbability, double mutationProbability, double populationSelectionRatio)
     {
         Random rand = new();
-        
+
         // Selection
         List<(TGene Gene, double Fitness)> selectedParents = new();
         while (selectedParents.Count < populationSelectionRatio * population.Count)
         {
-            int first = rand.Next(population.Count);
-            int second = rand.Next(population.Count);
-            if (first == second) continue;
-            int selectedIndex = population[first].Fitness >= population[second].Fitness ? first : second;
+            HashSet<int> competitors = new();
+            while (competitors.Count < 10)
+            {
+                competitors.Add(rand.Next(population.Count));
+            }
+            int selectedIndex = competitors.MaxBy(i => population[i].Fitness);
             selectedParents.Add((_traitGeneConverter.Convert(population[selectedIndex].Trait), population[selectedIndex].Fitness));
         }
         
@@ -65,7 +64,9 @@ public class GeneticAlgorithm<TGene, TTrait> where TGene : struct
         List<(TGene Gene, double Fitness)> newGeneration = new();
         newGeneration.AddRange(selectedParents);
         newGeneration.AddRange(offsprings);
-        return (newGeneration.Select(g => (_traitGeneConverter.ConvertBack(g.Gene), g.Fitness)).ToList());
+        var result = newGeneration.Select(g => (_traitGeneConverter.ConvertBack(g.Gene), g.Fitness)).ToList();
+
+        return result;
     }
 
     public TTrait Compute(
@@ -78,7 +79,7 @@ public class GeneticAlgorithm<TGene, TTrait> where TGene : struct
         List<(TTrait Trait, double Fitness)> currentPopulation = initialPopulation.Select(t => (t, _fitnessFunc(t))).ToList();
         for (int i = 0; i < maxGenerations; i++)
         {
-            currentPopulation = ComputeRound(currentPopulation, crossoverProbability,
+            currentPopulation = ComputeGeneration(currentPopulation, crossoverProbability,
                 mutationProbability, populationSelectionRatio);
             GenerationCalculated?.Invoke(this, new GeneticAlgorithmGenerationCalculatedEventArgs<TTrait>
             {
@@ -101,7 +102,7 @@ public class GeneticAlgorithm<TGene, TTrait> where TGene : struct
         while (true)
         {
             
-            currentPopulation = ComputeRound(currentPopulation, crossoverProbability,
+            currentPopulation = ComputeGeneration(currentPopulation, crossoverProbability,
                 mutationProbability, populationSelectionRatio);
             GenerationCalculated?.Invoke(this, new GeneticAlgorithmGenerationCalculatedEventArgs<TTrait>
             {
