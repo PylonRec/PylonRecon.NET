@@ -15,7 +15,13 @@ public static class ConvexHullHelper
         if (points.Length < 3)
             throw new ArithmeticException(
                 "To generate a convex hull, the point set must consist of at least 3 points.");
-        Plane3D plane = new(points[0], points[1], points[2]);
+        int planeBuildPointIndex = 2;
+        Line3D line01 = new(points[0], points[1]);
+        while (line01.Contains(points[planeBuildPointIndex]))
+        {
+            planeBuildPointIndex++;
+        }
+        Plane3D plane = new(points[0], points[1], points[planeBuildPointIndex]);
         
         // Compute a set of base on the plane.
         Vector3D xBase = plane.NormalVector switch
@@ -57,11 +63,17 @@ public static class ConvexHullHelper
         int index = 1;
         while (index < polarPoints.Length)
         {
+            if (pointStack.Count == 1)
+            {
+                pointStack.Push(polarPoints[index].Point);
+                index++;
+                continue;
+            }
             var b = pointStack.Pop();
             var a = pointStack.Peek();
             var ab = a.VectorTo(b);
             var ac = a.VectorTo(polarPoints[index].Point);
-            if (ab.X * ac.Y - ac.X * ab.Y > 0)
+            if (ab.X * ac.Y - ac.X * ab.Y > 0.00001)
             {
                 pointStack.Push(b);
                 pointStack.Push(polarPoints[index].Point);
