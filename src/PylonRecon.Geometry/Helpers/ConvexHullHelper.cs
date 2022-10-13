@@ -85,18 +85,5 @@ public static class ConvexHullHelper
         return pointStack.Select(p => mappedPoints[p]).ToList();
     }
 
-    private static Point2D? GetRelativeCoordinate(this Vector3D v, Vector3D i, Vector3D j)
-    {
-        // (v) = (a, b, c), (i) = (l, m, n), (j) = (p, q, r)
-        // Solve: (v) = x (i) + y (j)
-        if (Matrix<double>.Build.DenseOfColumns(new[]
-            {
-                i.ToEnumerable(),
-                j.ToEnumerable()
-            }).Solve(Vector<double>.Build.DenseOfEnumerable(v.ToEnumerable())) is { Count: 2 } result)
-        {
-            return (result[0], result[1]);
-        }
-        return null;
-    }
+    private static Point2D? GetRelativeCoordinate(this Vector3D v, Vector3D i, Vector3D j) => (v * i, v * j);
 }
