@@ -4,7 +4,7 @@ namespace PylonRecon.Geometry;
 /// Half line (ray) in 3-dimensional space.
 /// Fixed on one end, which is called <see cref="StartPoint"/>.
 /// </summary>
-public sealed class HalfLine3D : LineBase
+public sealed class HalfLine3D : LineBase3D
 {
     /// <summary>
     /// The fixed end of the half line.

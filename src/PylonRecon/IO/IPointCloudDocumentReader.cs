@@ -1,6 +1,6 @@
 namespace PylonRecon.IO;
 
-public interface IPointCloudDataFileReader
+public interface IPointCloudDocumentReader
 {
     PointCloud ReadFrom(string filePath);
 }

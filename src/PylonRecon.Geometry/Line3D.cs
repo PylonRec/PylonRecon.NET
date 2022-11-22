@@ -1,6 +1,6 @@
 namespace PylonRecon.Geometry;
 
-public sealed class Line3D : LineBase
+public sealed class Line3D : LineBase3D
 {
     #region constants
 
@@ -32,10 +32,18 @@ public sealed class Line3D : LineBase
     public double DistanceTo(Point3D point)
     {
         var fp = FixedPoint.VectorTo(point);
-        return fp.Length * Math.Sqrt(1d - Math.Pow((fp * DirectionVector) / fp.Length, 2d));
+        return fp.Length * Math.Sqrt(1d - Math.Pow(fp * DirectionVector / fp.Length, 2d));
     }
 
+    public bool IsParallelTo(Plane3D plane) => plane.IsParallelTo(this);
+
+    public bool IsPerpendicularTo(Plane3D plane) => plane.IsPerpendicularTo(this);
+    
     public double? DistanceTo(Line3D other) => IsParallelTo(other) ? DistanceTo(other.FixedPoint) : null;
 
     public double? DistanceTo(Plane3D plane) => plane.DistanceTo(this);
+
+    public Line3D? ProjectTo(Plane3D plane) => IsPerpendicularTo(plane)
+        ? null
+        : new Line3D(FixedPoint.ProjectTo(plane), FixedPoint.MoveBy(DirectionVector).ProjectTo(plane));
 }

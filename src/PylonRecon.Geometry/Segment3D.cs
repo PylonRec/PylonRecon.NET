@@ -1,13 +1,13 @@
 namespace PylonRecon.Geometry;
 
-public sealed class Segment3D : LineBase, IInterpolatable
+public sealed class Segment3D : LineBase3D, IInterpolatable
 {
     public Point3D StartPoint => FixedPoint;
     public Point3D EndPoint { get; }
     public double Length { get; }
     
     private Line3D? _correspondingLine;
-    public override Line3D CorrespondingLine => _correspondingLine ??= new Line3D(FixedPoint, DirectionVector);
+    public override Line3D CorrespondingLine => _correspondingLine ??= new(FixedPoint, DirectionVector);
 
     public Segment3D(Point3D startPoint, Point3D endPoint)
         : base(startPoint, startPoint.VectorTo(endPoint), 0d, startPoint.DistanceTo(endPoint))

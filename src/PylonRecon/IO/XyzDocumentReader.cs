@@ -2,13 +2,13 @@ using PylonRecon.Geometry;
 
 namespace PylonRecon.IO;
 
-public class XyzPointCloudDataFileReader : IPointCloudDataFileReader
+public class XyzDocumentReader : IPointCloudDocumentReader
 {
     public PointCloud ReadFrom(string filePath)
     {
         if (!File.Exists(filePath)) throw new FileNotFoundException("Specified file not found.");
         var reader = File.OpenText(filePath);
-        return new(ReadByLine(reader));
+        return new(ReadByLine(reader).Distinct());
     }
 
     private IEnumerable<Point3D> ReadByLine(StreamReader reader)

@@ -19,9 +19,6 @@ public sealed class Point3D : Coordinate3D
     /// Default constructor for <see cref="Point3D"/> object. <br />
     /// Requires X, Y, Z coordinate to be specified explicitly.
     /// </summary>
-    /// <param name="x">The X coordinate.</param>
-    /// <param name="y">The Y coordinate.</param>
-    /// <param name="z">The Z coordinate.</param>
     public Point3D(double x, double y, double z) : base(x, y, z)
     {
         // Do nothing else.
@@ -89,6 +86,9 @@ public sealed class Point3D : Coordinate3D
         double k = -1d * (op * n) / (n * n);
         return MoveBy(k * n);
     }
+
+    public static Point3D GeometricCenterOf(Point3D point1, Point3D point2) =>
+        point1.MoveBy(0.5d * point1.VectorTo(point2));
     
     /// <summary>
     /// Returns a random point whose coordinates all lie between -1 and 1.

@@ -1,5 +1,3 @@
-using MathNet.Numerics.LinearAlgebra;
-
 namespace PylonRecon.Geometry.Helpers;
 
 /// <summary>
@@ -73,7 +71,86 @@ public static class ConvexHullHelper
             var a = pointStack.Peek();
             var ab = a.VectorTo(b);
             var ac = a.VectorTo(polarPoints[index].Point);
-            if (ab.X * ac.Y - ac.X * ab.Y > 0.00001)
+            if (ab.X * ac.Y - ac.X * ab.Y > 0.01)
+            {
+                pointStack.Push(b);
+                pointStack.Push(polarPoints[index].Point);
+                index++;
+            }
+        }
+
+        // Restore relative 2D points back to 3D using mapping.
+        return pointStack.Select(p => mappedPoints[p]).ToList();
+    }
+    
+    public static List<T> ComputeComplexConvexHull<T>(IEnumerable<T> sourceSet, Func<T, Point3D> pointExtractor)
+    {
+        var distinctSource = sourceSet.Distinct().ToArray();
+        // 2 points don't determine a plane.
+        if (distinctSource.Length < 3)
+            throw new ArithmeticException(
+                "To generate a convex hull, the point set must consist of at least 3 points.");
+        int planeBuildPointIndex = 2;
+        Line3D line01 = new(pointExtractor(distinctSource[0]), pointExtractor(distinctSource[1]));
+        while (line01.Contains(pointExtractor(distinctSource[planeBuildPointIndex])))
+        {
+            planeBuildPointIndex++;
+        }
+
+        Plane3D plane = new(pointExtractor(distinctSource[0]), pointExtractor(distinctSource[1]),
+            pointExtractor(distinctSource[planeBuildPointIndex]));
+        
+        // Compute a set of base on the plane.
+        Vector3D xBase = plane.NormalVector switch
+        {
+            {X: 0} => (1d, 0d, 0d),
+            {Y: 0} => (0d, 1d, 0d),
+            {Z: 0} => (0d, 0d, 1d),
+            _ => (1d, 1d, -1 * (plane.NormalVector.X + plane.NormalVector.Y) / plane.NormalVector.Z)
+        };
+        Vector3D yBase = plane.NormalVector ^ xBase;
+
+        // Map each valid point in the plane to its relative coordinate.
+        Dictionary<Point2D, T> mappedPoints = new();
+        foreach (var p in sourceSet)
+        {
+            // Exclude all points that don't lie in the plane.
+            if (!plane.Contains(pointExtractor(p))) continue;
+            var relative = plane.CenterPoint.VectorTo(pointExtractor(p)).GetRelativeCoordinate(xBase, yBase);
+            if (relative is null) continue;
+            mappedPoints[relative] = p;
+        }
+
+        var relPoints = mappedPoints.Keys.ToList();
+        var start = relPoints.MinBy(static p => p.Y);
+        if (start is null) throw new ArithmeticException("Cannot decide where to start the convex hull.");
+        relPoints.Remove(start);
+        
+        // Convert coordinates of the points from Cartesian to polar.
+        (double Theta, double Rho, Point2D Point)[] polarPoints = relPoints.Select(p =>
+        {
+            var relative = start.VectorTo(p);
+            return (Math.Acos(relative * (1, 0) / relative.Length), relative.Length, p);
+        }).OrderBy(c => c.Item1).ThenBy(c => c.Length).ToArray();
+
+        Stack<Point2D> pointStack = new();
+        pointStack.Push(start);
+        pointStack.Push(polarPoints[0].Point);
+
+        int index = 1;
+        while (index < polarPoints.Length)
+        {
+            if (pointStack.Count == 1)
+            {
+                pointStack.Push(polarPoints[index].Point);
+                index++;
+                continue;
+            }
+            var b = pointStack.Pop();
+            var a = pointStack.Peek();
+            var ab = a.VectorTo(b);
+            var ac = a.VectorTo(polarPoints[index].Point);
+            if (ab.X * ac.Y - ac.X * ab.Y > 0.01)
             {
                 pointStack.Push(b);
                 pointStack.Push(polarPoints[index].Point);

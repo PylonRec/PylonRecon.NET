@@ -34,7 +34,7 @@ public class GeneticAlgorithm<TGene, TTrait> where TGene : struct
         while (selectedParents.Count < populationSelectionRatio * population.Count)
         {
             HashSet<int> competitors = new();
-            while (competitors.Count < 10)
+            while (competitors.Count < population.Count / 2)
             {
                 competitors.Add(rand.Next(population.Count));
             }

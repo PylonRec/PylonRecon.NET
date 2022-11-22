@@ -11,7 +11,7 @@ Vector3D topDirection = (0d, 0d, 1d);
 Vector3D frontDirection = topDirection.GetPerpendicularVectorSample();
 Vector3D leftDirection = frontDirection ^ topDirection;
 
-double halfHeight = rand.NextDouble() * 400d + 1800d; // (1800, 2200)
+double halfHeight = rand.NextDouble() * 400d + 2800d; // (1800, 2200)
 double halfTopWidth = rand.NextDouble() * 400d + 200d; // (200, 600)
 double halfTopDepth = rand.NextDouble() * 400d + 200d; // (200, 600)
 double halfBottomWidth = rand.NextDouble() * 400d + 800d; // (800, 1200)
@@ -53,14 +53,24 @@ foreach (var face in faceIndices)
         (cornerPoints[edge1.TopEnd], cornerPoints[edge2.TopEnd]),
         (cornerPoints[edge1.BottomEnd], cornerPoints[edge2.BottomEnd])
     };
+    List<Triangle3D> triangles = new();
     var edge1Unit = cornerPoints[edge1.BottomEnd].VectorTo(cornerPoints[edge1.TopEnd]) * (1d / sideSegments);
     var edge2Unit = cornerPoints[edge2.BottomEnd].VectorTo(cornerPoints[edge2.TopEnd]) * (1d / sideSegments);
     for (int i = 1; i < sideSegments; i++)
     {
-        edges.Add((cornerPoints[edge1.BottomEnd].MoveBy((i - 0.5d) * edge1Unit),
-            cornerPoints[edge2.BottomEnd].MoveBy((i + 0.5d) * edge2Unit)));
-        edges.Add((cornerPoints[edge2.BottomEnd].MoveBy((i - 0.5d) * edge2Unit),
+        var crossEdgeA = (cornerPoints[edge1.BottomEnd].MoveBy((i - 0.5d) * edge1Unit),
+            cornerPoints[edge2.BottomEnd].MoveBy((i + 0.5d) * edge2Unit));
+        var crossEdgeB = (cornerPoints[edge2.BottomEnd].MoveBy((i - 0.5d) * edge2Unit),
+            cornerPoints[edge1.BottomEnd].MoveBy((i + 0.5d) * edge1Unit));
+        edges.Add(crossEdgeA);
+        edges.Add(crossEdgeB);
+        var intersectionPoint =
+            new Line3D(crossEdgeA.Item1, crossEdgeA.Item2).IntersectionPointWith(
+                new Line3D(crossEdgeB.Item1, crossEdgeB.Item2));
+        triangles.Add(new(intersectionPoint, cornerPoints[edge1.BottomEnd].MoveBy((i - 0.5d) * edge1Unit),
             cornerPoints[edge1.BottomEnd].MoveBy((i + 0.5d) * edge1Unit)));
+        triangles.Add(new(intersectionPoint, cornerPoints[edge2.BottomEnd].MoveBy((i - 0.5d) * edge2Unit),
+            cornerPoints[edge2.BottomEnd].MoveBy((i + 0.5d) * edge2Unit)));
     }
     var midTop = cornerPoints[edge1.TopEnd]
         .MoveBy(cornerPoints[edge1.TopEnd].VectorTo(cornerPoints[edge2.TopEnd]) * 0.5d);
@@ -70,14 +80,37 @@ foreach (var face in faceIndices)
     edges.Add((midTop, cornerPoints[edge2.TopEnd].MoveBy(-0.5d * edge2Unit)));
     edges.Add((midBottom, cornerPoints[edge1.BottomEnd].MoveBy(0.5d * edge1Unit)));
     edges.Add((midBottom, cornerPoints[edge2.BottomEnd].MoveBy(0.5d * edge2Unit)));
+    triangles.Add(new(midTop, cornerPoints[edge1.TopEnd],
+        cornerPoints[edge1.TopEnd].MoveBy(-0.5d * edge1Unit)));
+    triangles.Add(new(midTop, cornerPoints[edge2.TopEnd],
+        cornerPoints[edge2.TopEnd].MoveBy(-0.5d * edge2Unit)));
+    triangles.Add(new(midBottom, cornerPoints[edge1.BottomEnd],
+        cornerPoints[edge1.BottomEnd].MoveBy(0.5d * edge1Unit)));
+    triangles.Add(new(midBottom, cornerPoints[edge2.BottomEnd],
+        cornerPoints[edge2.BottomEnd].MoveBy(0.5d * edge2Unit)));
     cloud.AddRange(edges.SelectMany(
         edge => new Cylinder3D(edge.End1, edge.End2, 2d)
-            .GetInterpolatedSample(20d)
+            .GetInterpolatedSample(10d)
             .Select(p3d => new CloudPoint {Location = p3d})));
+    cloud.AddRange(triangles.SelectMany(
+        t => t.GetInterpolatedSample(50).Select(p3d => new CloudPoint {Location = p3d})));
 }
 
-XyzPointCloudDataFileWriter writer = new();
+for (var i = 0; i < cloud.Count; i++)
+{
+    cloud[i] = new() {Location = cloud[i].Location.MoveBy(Vector3D.Random() * 2)};
+}
+
+XyzDocumentWriter writer = new();
 writer.WriteTo(cloud, "/Users/brandon/Desktop/model.xyz");
 
 Console.WriteLine($"Center: {centralPoint}");
+
+double avgX = cloud.Locations.Average(p => p.X);
+double avgY = cloud.Locations.Average(p => p.Y);
+double avgZ = cloud.Locations.Average(p => p.Z);
+Point3D averageCenter = (avgX, avgY, avgZ);
+
+Console.WriteLine($"Average: {averageCenter}");
+
 Console.WriteLine($"Axis: {topDirection}");

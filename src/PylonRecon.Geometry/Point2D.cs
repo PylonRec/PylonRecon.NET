@@ -24,6 +24,8 @@ public class Point2D : Coordinate2D
     
     public double DistanceTo(Point2D other) => VectorTo(other).Length;
 
+    public double DistanceTo(Line2D line) => line.DistanceTo(this);
+    
     public Point2D MoveBy(Vector2D displacement) => (X + displacement.X, Y + displacement.Y);
 
     public static Point2D Random() => Origin.MoveBy(Vector2D.Random());

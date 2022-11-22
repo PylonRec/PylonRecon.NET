@@ -3,7 +3,7 @@ using PylonRecon.Geometry.Helpers;
 
 namespace PylonRecon.Geometry;
 
-public abstract class LineBase
+public abstract class LineBase3D
 {
     /// <summary>
     /// Direction vector of the object.
@@ -11,7 +11,7 @@ public abstract class LineBase
     public Vector3D DirectionVector { get; }
     
     /// <summary>
-    /// For any <see cref="LineBase"/> object, returns the line that contains this object.
+    /// For any <see cref="LineBase3D"/> object, returns the line that contains this object.
     /// </summary>
     public abstract Line3D CorrespondingLine { get; }
 
@@ -34,11 +34,11 @@ public abstract class LineBase
     /// <param name="minPosition"></param>
     /// <param name="maxPosition"></param>
     /// <exception cref="ArithmeticException"></exception>
-    internal LineBase(Point3D fixedPoint, Vector3D directionVector, double? minPosition = null,
+    internal LineBase3D(Point3D fixedPoint, Vector3D directionVector, double? minPosition = null,
         double? maxPosition = null)
     {
         if (directionVector.Length.IsZero())
-            throw new ArithmeticException("Lines must be constructed with given direction vectors.");
+            throw new ArithmeticException("Lines must be constructed with a given direction vector.");
         DirectionVector = directionVector.Normalize();
         FixedPoint = fixedPoint;
         _minPosition = minPosition;
@@ -53,11 +53,11 @@ public abstract class LineBase
                (_maxPosition is null || relativePosition <= _maxPosition);
     }
 
-    public bool IsParallelTo(LineBase other) => DirectionVector.IsParallelTo(other.DirectionVector);
+    public bool IsParallelTo(LineBase3D other) => DirectionVector.IsParallelTo(other.DirectionVector);
 
-    public bool IsPerpendicularTo(LineBase other) => DirectionVector.IsPerpendicularTo(other.DirectionVector);
+    public bool IsPerpendicularTo(LineBase3D other) => DirectionVector.IsPerpendicularTo(other.DirectionVector);
 
-    public Point3D? IntersectionPointWith(LineBase other)
+    public Point3D? IntersectionPointWith(LineBase3D other)
     {
         // (D) = this.DirectionVector, (E) = other.DirectionVector
         // P = this.FixedPoint, Q = other.FixedPoint
@@ -81,29 +81,32 @@ public abstract class LineBase
 
     public Point3D? IntersectionPointWith(Plane3D plane) => plane.IntersectionPointWith(this);
     
-    public double IncludedAngleTo(Line3D other) => Math.Acos(DirectionVector * other.DirectionVector);
+    public double IncludedAngleWith(LineBase3D other) => Math.Acos(Math.Abs(DirectionVector * other.DirectionVector));
 
     public Plane3D SamplePerpendicularPlane() => new(FixedPoint, DirectionVector);
     
-    private bool Equals(LineBase other)
+    private bool Equals(LineBase3D other)
     {
         if (GetType() != other.GetType()) return false;
-        if (this is Line3D) return DirectionVector.IsParallelTo(other.DirectionVector) && Contains(other.FixedPoint);
-        if (this is HalfLine3D) return DirectionVector == other.DirectionVector && FixedPoint == other.FixedPoint;
-        if (this is Segment3D thisSegment && other is Segment3D otherSegment)
-            return thisSegment.StartPoint == otherSegment.StartPoint && thisSegment.EndPoint == otherSegment.EndPoint ||
-                   thisSegment.StartPoint == otherSegment.EndPoint && thisSegment.EndPoint == otherSegment.StartPoint;
-        return false;
+        return this switch
+        {
+            Line3D => DirectionVector.IsParallelTo(other.DirectionVector) && Contains(other.FixedPoint),
+            HalfLine3D => DirectionVector == other.DirectionVector && FixedPoint == other.FixedPoint,
+            Segment3D thisSegment when other is Segment3D otherSegment =>
+                thisSegment.StartPoint == otherSegment.StartPoint && thisSegment.EndPoint == otherSegment.EndPoint ||
+                thisSegment.StartPoint == otherSegment.EndPoint && thisSegment.EndPoint == otherSegment.StartPoint,
+            _ => false
+        };
     }
 
-    public static bool operator ==(LineBase line1, LineBase line2) => line1.Equals(line2);
-    public static bool operator !=(LineBase line1, LineBase line2) => !line1.Equals(line2);
+    public static bool operator ==(LineBase3D line1, LineBase3D line2) => line1.Equals(line2);
+    public static bool operator !=(LineBase3D line1, LineBase3D line2) => !line1.Equals(line2);
     
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        return obj is LineBase other && Equals(other);
+        return obj is LineBase3D other && Equals(other);
     }
 
     public override int GetHashCode() => HashCode.Combine(FixedPoint, DirectionVector);

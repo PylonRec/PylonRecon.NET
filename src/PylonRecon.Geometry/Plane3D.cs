@@ -57,20 +57,20 @@ public sealed class Plane3D
     
     public bool Contains(Point3D point) => (CenterPoint.VectorTo(point) * NormalVector).IsZero();
 
-    public bool Contains(LineBase line) =>
+    public bool Contains(LineBase3D line) =>
         NormalVector.IsPerpendicularTo(line.DirectionVector) && Contains(line.FixedPoint);
 
-    public bool IsParallelTo(LineBase line) =>
+    public bool IsParallelTo(LineBase3D line) =>
         NormalVector.IsPerpendicularTo(line.DirectionVector) && !Contains(line.FixedPoint);
     
     public bool IsParallelTo(Plane3D other) =>
         NormalVector.IsParallelTo(other.NormalVector) && !Contains(other.CenterPoint);
 
-    public bool IsPerpendicularTo(LineBase line) => NormalVector.IsParallelTo(line.DirectionVector);
+    public bool IsPerpendicularTo(LineBase3D line) => NormalVector.IsParallelTo(line.DirectionVector);
 
     public bool IsPerpendicularTo(Plane3D other) => NormalVector.IsPerpendicularTo(other.NormalVector);
 
-    public Point3D? IntersectionPointWith(LineBase line)
+    public Point3D? IntersectionPointWith(LineBase3D line)
     {
         // C = this.CenterPoint, F = line.FixedPoint
         // (N) = this.NormalVector, (D) = line.DirectionVector
@@ -132,4 +132,6 @@ public sealed class Plane3D
     public double? DistanceTo(Line3D line) => IsParallelTo(line) ? DistanceTo(line.FixedPoint) : null;
 
     public double? DistanceTo(Plane3D other) => IsParallelTo(other) ? DistanceTo(other.CenterPoint) : null;
+
+    public double RelativeAltitudeOf(Point3D point) => CenterPoint.VectorTo(point) * NormalVector;
 }
