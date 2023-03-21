@@ -5,16 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PylonRecon.Wpf"
         xmlns:xamlHost="clr-namespace:Microsoft.Toolkit.Wpf.UI.XamlHost;assembly=Microsoft.Toolkit.Wpf.UI.XamlHost"
+        xmlns:themes="clr-namespace:PylonRecon.Wpf.Themes"
+        xmlns:helix="http://helix-toolkit.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="电力塔点云特征提取软件" Height="600" Width="1000" FontFamily="HarmonyOS Sans SC"
+        Background="Black" Style="{StaticResource Style.Window.Universal}">
+    <themes:UniversalWindowStyle.TitleBar>
+        <themes:UniversalTitleBar ForegroundColor="White" InactiveForegroundColor="#7FFFFFFF"
+                                  ButtonHoverForeground="White" ButtonHoverBackground="#3FFFFFFF"
+                                  ButtonPressedForeground="#7FFFFFFF" ButtonPressedBackground="#3F000000" />
+    </themes:UniversalWindowStyle.TitleBar>
+    <Grid Margin="0 40 0 0">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid Background="Black" />
+        <helix:HelixViewport3D x:Name="HelixViewport" Background="Black"
+                               ShowViewCube="False" ShowFrameRate="True" ShowCameraInfo="True" Margin="12" />
         <xamlHost:WindowsXamlHost x:Name="FrameHost" Grid.Column="1"
                                   InitialTypeName="Windows.UI.Xaml.Controls.Frame"
-                                  ChildChanged="FrameHost_ChildChanged" />
+                                  ChildChanged="FrameHost_ChildChanged" Margin="12" />
     </Grid>
 </Window>

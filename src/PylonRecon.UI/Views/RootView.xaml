@@ -5,14 +5,22 @@
     xmlns:local="using:PylonRecon.UI.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    mc:Ignorable="d" RequestedTheme="Dark"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Grid Padding="20">
-        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                    Orientation="Horizontal" Spacing="8">
-            <Button Content="Previous" />
-            <Button Content="Next" Style="{ThemeResource AccentButtonStyle}" />
+    Background="Black" RequestedTheme="Dark" FontFamily="HarmonyOS Sans SC"
+    mc:Ignorable="d">
+    <Grid Padding="8" CornerRadius="8" Background="#1FFFFFFF" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+        <StackPanel Margin="20" Spacing="40">
+            <TextBlock FontSize="32" FontWeight="Medium" Text="开始" />
+            <TextBlock FontSize="16" TextWrapping="Wrap"
+                       Text="本软件是一款交互式电力塔点云特征提取软件。在接下来的流程中，您将在本面板的提示下使用本软件逐步完成点云文件的导入、点云去噪、电力塔中轴校正、电力塔分段、各部分特征提取、数据导出等步骤。" />
+            <TextBlock FontSize="16" TextWrapping="Wrap"
+                       Text="下面，请点击下方「启动」按钮开始流程。" />
+            <Button HorizontalAlignment="Right" Style="{ThemeResource AccentButtonStyle}"
+                    Command="{x:Bind StartCommand}" Padding="24 12">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontFamily="ms-appx:///Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE768;"/>
+                    <TextBlock Text="启动" />
+                </StackPanel>
+            </Button>
         </StackPanel>
     </Grid>
 </Page>

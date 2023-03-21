@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,12 @@ namespace PylonRecon.UI.Views
         public RootView()
         {
             this.InitializeComponent();
+        }
+
+        [RelayCommand]
+        private void Start()
+        {
+            Frame.Navigate(typeof(BrowseFileView));
         }
     }
 }

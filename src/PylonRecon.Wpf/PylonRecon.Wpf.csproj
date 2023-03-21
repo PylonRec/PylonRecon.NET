@@ -13,11 +13,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HelixToolkit.Core.Wpf" Version="2.23.0" />
     <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls" Version="6.1.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PylonRecon.Geometry\PylonRecon.Geometry.csproj" />
+    <ProjectReference Include="..\PylonRecon.Shared\PylonRecon.Shared.csproj" />
     <ProjectReference Include="..\PylonRecon.UI\PylonRecon.UI.csproj" />
+    <ProjectReference Include="..\PylonRecon\PylonRecon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.VCRTForwarders.140" Version="1.0.7" />
   </ItemGroup>
 
 </Project>

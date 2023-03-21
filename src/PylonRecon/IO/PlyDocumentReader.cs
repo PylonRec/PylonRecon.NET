@@ -33,8 +33,8 @@ public class PlyDocumentReader : IPointCloudDocumentReader
                 {
                     CloudPoint currentPoint = new();
                     var segments = reader.ReadLine()?.Split(' ');
-                    if (segments is null || segments.Length != properties.Count) continue;
-                    for (int j = 0; j < properties.Count; j++)
+                    if (segments is null) continue;
+                    for (int j = 0; j < segments.Length && j < properties.Count; j++)
                     {
                         PropertyHelper.PropertyWriterMapping[properties[j]](segments[j], currentPoint);
                     }
