@@ -178,9 +178,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PylonRecon.Shared\PylonRecon.Shared.csproj">
+    <ProjectReference Include="..\PylonRecon.Bridge\PylonRecon.Bridge.csproj">
       <Project>{59e01d57-32dd-4483-a77d-7a48cbca04c0}</Project>
-      <Name>PylonRecon.Shared</Name>
+      <Name>PylonRecon.Bridge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PylonRecon.Geometry\PylonRecon.Geometry.csproj">
+      <Project>{f5326d37-3882-4aae-a3a7-f8146bc81b0f}</Project>
+      <Name>PylonRecon.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PylonRecon\PylonRecon.csproj">
+      <Project>{8f51433d-3e8b-4573-8ff7-8e00e483855a}</Project>
+      <Name>PylonRecon</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

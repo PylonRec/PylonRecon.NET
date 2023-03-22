@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PylonRecon.Geometry\PylonRecon.Geometry.csproj" />
-    <ProjectReference Include="..\PylonRecon.Shared\PylonRecon.Shared.csproj" />
+    <ProjectReference Include="..\PylonRecon.Bridge\PylonRecon.Bridge.csproj" />
     <ProjectReference Include="..\PylonRecon.UI\PylonRecon.UI.csproj" />
     <ProjectReference Include="..\PylonRecon\PylonRecon.csproj" />
   </ItemGroup>

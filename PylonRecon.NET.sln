@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PylonRecon.Wpf", "src\Pylon
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "PylonRecon.Wpf.Package", "src\PylonRecon.Wpf.Package\PylonRecon.Wpf.Package.wapproj", "{FBCAE8AF-8655-4796-A998-28D6A55BD8AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon.Shared", "src\PylonRecon.Shared\PylonRecon.Shared.csproj", "{59E01D57-32DD-4483-A77D-7A48CBCA04C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PylonRecon.Bridge", "src\PylonRecon.Bridge\PylonRecon.Bridge.csproj", "{59E01D57-32DD-4483-A77D-7A48CBCA04C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
