@@ -15,7 +15,7 @@ public class Polygon3D : IInterpolatable
         for (int i = 0; i + 2 < _convexHull.Count; i++)
         {
             result.AddRange(
-                new Triangle3D(_convexHull[i], _convexHull[i + 1], _convexHull[^1])
+                new Triangle3D(_convexHull[i], _convexHull[i + 1], _convexHull[_convexHull.Count - 1])
                     .GetInterpolatedSample(interpolationSpacing));
         }
         return result;

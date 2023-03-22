@@ -2,7 +2,8 @@
 
 internal static class LinqUtils
 {
-#if NETCOREAPP3_1
+#if NET6_0_OR_GREATER
+#else
     public static TSource? MinBy<TSource, TKey>(this IEnumerable<TSource> collection, Func<TSource, TKey> mapper) where TKey : IComparable<TKey>
     {
         var minElement = collection.FirstOrDefault();

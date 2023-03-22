@@ -81,6 +81,6 @@ public class PylonBodyBottomCornerExtractor
                 currentPoint = currentPoint.MoveBy(minDistance * direction);
             }
         }
-        yield return convexHull[^1];
+        yield return convexHull[convexHull.Count - 1];
     }
 }
