@@ -1,0 +1,54 @@
+﻿<Page
+    x:Class="PylonRecon.UI.Views.AxisFixView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PylonRecon.UI.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:util="using:PylonRecon.UI.Utilities"
+    mc:Ignorable="d"
+    Background="Black" RequestedTheme="Dark" FontFamily="HarmonyOS Sans SC">
+    <Page.Resources>
+        <util:BooleanInverseConverter x:Key="BooleanInverseConverter" />
+    </Page.Resources>
+    <ScrollViewer Padding="8" CornerRadius="8" BorderThickness="1"
+          Background="#1FFFFFFF" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+        <StackPanel Margin="20">
+            <TextBlock FontSize="20" FontWeight="Medium" Opacity="0.6" Text="第二步" />
+            <TextBlock FontSize="32" FontWeight="Medium" Text="中轴校正" Margin="0 0 0 20" />
+            <TextBlock FontSize="16" TextWrapping="Wrap" Margin="0 20"
+                       Text="接下来，我们将通过人工粗调 - 算法精校的方式完成电力塔的中轴校正。首先请在左侧视图中将电力塔点云尽量旋转至竖直方向，完成后请单击下方「记录调整结果」按钮。" />
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Margin="0 20" Padding="18 12">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontFamily="ms-appx:///Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE70F;"/>
+                        <TextBlock Text="记录调整结果" />
+                    </StackPanel>
+                </Button>
+                <Border Visibility="{x:Bind PointCloudLoaded, Mode=OneWay}"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch" Margin="0 20" Padding="8"
+                        CornerRadius="4" BorderThickness="1"
+                        Background="#1FFFFFFF" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+                    <TextBlock Text="lcbvrehjgwdcjsdbfvgfwekbfn vghjefrdn bcnrkeuhnriwcsf bvgerfkdnsxb vghekdnsc bfhvkfwnd"
+                           FontSize="16" TextWrapping="Wrap" />
+                </Border>
+            </Grid>
+            <TextBlock FontSize="16" TextWrapping="Wrap" Margin="0 20"
+                       Text="调整结果已记录。下面请调整下方给出的配置，我们将根据电力塔的对称性，通过遗传算法精确化调整电力塔中轴。如果您重新调整了粗略的中轴方向，请在调整后单击上方「记录调整结果」按钮。" />
+            <Button 
+                    Margin="0 20 0 0" Padding="18 12" HorizontalAlignment="Right"
+                    Style="{ThemeResource AccentButtonStyle}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="16" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE72A;"/>
+                    <TextBlock FontSize="16" Text="下一步"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

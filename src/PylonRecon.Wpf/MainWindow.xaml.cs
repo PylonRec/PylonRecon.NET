@@ -1,5 +1,6 @@
 ﻿using HelixToolkit.Wpf;
 using PylonRecon.IO;
+using PylonRecon.Wpf.BridgeOperations;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,35 +16,25 @@ namespace PylonRecon.Wpf
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
-            Shared.BrowseFileContext.Instance.FileChosen += Instance_FileChosen;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             (Windows.UI.Xaml.Application.Current as UI.App)!.WindowHandle =
                 new System.Windows.Interop.WindowInteropHelper(this).Handle;
+            BindContextActions();
         }
 
-        private void Instance_FileChosen(object? sender, System.EventArgs e)
+        private void BindContextActions()
         {
-            var path = Shared.BrowseFileContext.Instance.FilePath;
-            var model = new PlyDocumentReader().ReadFrom(path);
-            HelixViewport.Children.Clear();
-            Point3DCollection points = new();
-            model.ToList().ForEach(point => points.Add(new Point3D(point.Location.X, point.Location.Y, point.Location.Z)));
-            HelixViewport.Children.Add(new PointsVisual3D
-            {
-                Points = points,
-                Color = Colors.Red,
-                Size = 5.0
-            });
+            new BrowseFileActions(HelixViewport).Bind();
         }
 
         private void FrameHost_ChildChanged(object sender, System.EventArgs e)
         {
             if (FrameHost.GetUwpInternalObject() is Windows.UI.Xaml.Controls.Frame frame)
             {
-                frame.Navigate(typeof(UI.Views.RootView));
+                frame.Navigate(typeof(UI.Views.LandingView));
             }
         }
     }

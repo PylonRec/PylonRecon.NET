@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="Black" RequestedTheme="Dark" FontFamily="HarmonyOS Sans SC">
-    <Grid Padding="8" CornerRadius="8" Background="#1FFFFFFF" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+    <ScrollViewer Padding="8" CornerRadius="8" BorderThickness="1"
+          Background="#1FFFFFFF" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
         <StackPanel Margin="20">
             <TextBlock FontSize="20" FontWeight="Medium" Opacity="0.6" Text="第一步" />
             <TextBlock FontSize="32" FontWeight="Medium" Text="数据载入" Margin="0 0 0 20" />
@@ -15,12 +16,32 @@
                        Text="首先，我们需要从计算机本地文件中加载原始点云数据。本软件目前支持从 .xyz 文件和 .ply 文件 (仅支持字符编码) 中读取点云数据。" />
             <TextBlock FontSize="16" TextWrapping="Wrap" Margin="0 20"
                        Text="请单击下方「浏览文件」按钮选取点云文件。" />
-            <Button Margin="0 20" Padding="24 12" Command="{x:Bind BrowseFileCommand}">
+            <Button Margin="0 20" Padding="18 12" Command="{x:Bind BrowseFileCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <FontIcon FontFamily="ms-appx:///Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xEC50;"/>
                     <TextBlock Text="浏览文件" />
                 </StackPanel>
             </Button>
+            <TextBlock FontSize="16" TextWrapping="Wrap" Margin="0 20 0 0"
+                       Visibility="{x:Bind PointCloudLoaded, Mode=OneWay}"
+                       Text="点云数据已加载。以下是相关属性。" />
+            <Border Visibility="{x:Bind PointCloudLoaded, Mode=OneWay}"
+                    HorizontalAlignment="Stretch" Margin="0 20" Padding="8"
+                    CornerRadius="4" BorderThickness="1"
+                    Background="#1FFFFFFF" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+                <TextBlock Text="{x:Bind PointCloudProperties, Mode=OneWay}"
+                           FontSize="16" TextWrapping="Wrap" />
+            </Border>
+            <Button Visibility="{x:Bind PointCloudLoaded, Mode=OneWay}"
+                    Margin="0 20 0 0" Padding="18 12" HorizontalAlignment="Right"
+                    Style="{ThemeResource AccentButtonStyle}"
+                    Command="{x:Bind NextViewCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="16" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Segoe Fluent Icons.ttf#Segoe Fluent Icons" Glyph="&#xE72A;"/>
+                    <TextBlock FontSize="16" Text="下一步"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Page>
