@@ -27,7 +27,8 @@ namespace PylonRecon.Wpf
 
         private void BindContextActions()
         {
-            new BrowseFileActions(HelixViewport).Bind();
+            new BrowseFileOperations(HelixViewport).Bind();
+            new AxisFixOperations(HelixViewport).Bind();
         }
 
         private void FrameHost_ChildChanged(object sender, System.EventArgs e)

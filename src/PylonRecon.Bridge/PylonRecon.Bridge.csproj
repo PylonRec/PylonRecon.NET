@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Primitives\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PylonRecon.Geometry\PylonRecon.Geometry.csproj" />
     <ProjectReference Include="..\PylonRecon\PylonRecon.csproj" />
   </ItemGroup>

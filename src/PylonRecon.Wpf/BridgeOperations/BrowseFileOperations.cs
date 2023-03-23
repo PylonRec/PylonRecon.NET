@@ -6,11 +6,11 @@ using System.Windows.Media.Media3D;
 
 namespace PylonRecon.Wpf.BridgeOperations
 {
-    internal class BrowseFileActions
+    internal class BrowseFileOperations
     {
-        private HelixViewport3D _viewport;
+        private readonly HelixViewport3D _viewport;
 
-        public BrowseFileActions(HelixViewport3D viewport)
+        public BrowseFileOperations(HelixViewport3D viewport)
         {
             _viewport = viewport;
         }

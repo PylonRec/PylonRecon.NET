@@ -23,7 +23,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Window">
-                    <Border Padding="1">
+                    <Border Background="Black" Padding="2 0">
                         <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
                             <Grid x:Name="TitleBarPanel" VerticalAlignment="Top" Height="39">
                                 <FrameworkElement.Resources>

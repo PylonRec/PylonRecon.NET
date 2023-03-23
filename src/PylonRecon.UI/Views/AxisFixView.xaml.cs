@@ -1,30 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+using CommunityToolkit.Mvvm.Input;
+using PylonRecon.Geometry;
+using PylonRecon.Shared;
 
 namespace PylonRecon.UI.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    [ObservableObject]
     public sealed partial class AxisFixView : Page
     {
+        public bool ManualAxisCaptured => ManualAxis is not null;
+        
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ManualAxisCaptured))]
+        private Vector3D? _manualAxis;
+
+        [ObservableProperty] private string _manualAxisInfo = string.Empty;
+
+        [ObservableProperty] private int _initialPopulation = 30;
+        [ObservableProperty] private double _crossoverProbability = 0.6d;
+        [ObservableProperty] private double _mutationProbability = 0.1d;
+        [ObservableProperty] private double _parentRemainingRatio = 0.4d;
+        [ObservableProperty] private double _maxIteration = 10;
+        
         public AxisFixView()
         {
             this.InitializeComponent();
+        }
+
+        [RelayCommand]
+        private void CaptureManualAxis()
+        {
+            ManualAxis = AxisFixBridge.Instance.CaptureAxisDirection();
+            if (ManualAxis is not null)
+            {
+                ManualAxisInfo = $"手动调整记录值\n" +
+                                 $"X: {ManualAxis.X}\n" +
+                                 $"Y: {ManualAxis.Y}\n" +
+                                 $"Z: {ManualAxis.Z}";
+            }
+        }
+
+        [RelayCommand]
+        private void NextView()
+        {
+            Frame.Navigate(typeof(SegmentationView));
         }
     }
 }

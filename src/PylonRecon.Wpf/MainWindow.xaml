@@ -18,7 +18,7 @@
     <Grid Margin="0 40 0 0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="200*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <helix:HelixViewport3D x:Name="HelixViewport" Background="Black"
                                ShowViewCube="False" ShowFrameRate="True" ShowCameraInfo="True" Margin="12" />

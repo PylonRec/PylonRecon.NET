@@ -19,6 +19,7 @@
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
     <LangVersion>default</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -132,6 +133,12 @@
     <Compile Include="Views\LandingView.xaml.cs">
       <DependentUpon>LandingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SegmentationView.xaml.cs">
+      <DependentUpon>SegmentationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SegmentExtractionView.xaml.cs">
+      <DependentUpon>SegmentExtractionView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -181,6 +188,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LandingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SegmentationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SegmentExtractionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
